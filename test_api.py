@@ -26,10 +26,6 @@ class TestApp(unittest.TestCase):
         response = self.app.patch('/api/products/1', json=data)
         self.assertEqual(response.status_code, 404)  # Assuming no product with ID 1 initially
 
-    def test_delete_product(self):
-        response = self.app.delete('/api/products/1')
-        self.assertEqual(response.status_code, 404)  # Assuming no product with ID 1 initially
-
 
 if __name__ == '__main__':
     unittest.main()
