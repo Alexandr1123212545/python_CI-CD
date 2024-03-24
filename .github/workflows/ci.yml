@@ -1,41 +1,33 @@
-name: Continious Integration
+name: Continuous Integration
 
 on:
-	push:
-		branches:
-			- main
+  push:
+    branches:
+      - main
 
 jobs:
-	build:
-		runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: worker
 
-		steps:
-		- name: Checkout repository
-			uses: actions/checkout@v2
-			with:
-				ref:
-					worker
+      - name: Initial dependencies
+        run: 'pip install -r requirements.txt'
 
-		- name: Initial dependencies
-			run:
-				pip install -r requirements.txt
+      - name: Creating DB
+        run: 'python db.py -a'
 
-		- name: Creating DB
-			run:
-				python db.py -a
-	
-		- name: Show DB
-			run:
-				python db.py -p
+      - name: Show DB
+        run: 'python db.py -p'
 
-		- name: Wake Up
-			run:
-				python app.py --host 127.0.0.1 --port 5000 
+      - name: Wake Up
+        run: 'python app.py --host 127.0.0.1 --port 5000 &'
 
-		- name: Deleted products
-			run: 
-				python db.py -d		
+      - name: Deleted products
+        run: 'python db.py -d'
 
-    - name: Run unit test
-			run:
-				python test_api.py
+      - name: Run unit test
+        run: 'python test_api.py'
